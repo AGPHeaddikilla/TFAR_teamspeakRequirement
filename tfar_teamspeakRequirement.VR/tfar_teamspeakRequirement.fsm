@@ -1,0 +1,138 @@
+/*%FSM<COMPILE "D:\Program Files\Steam\steamapps\common\Arma 3 Tools\FSMEditor\scriptedFSM.cfg, tfar_teamspeakRequirement.fsm">*/
+/*%FSM<HEAD>*/
+/*
+item0[] = {"Init",0,250,-40.883263,-148.760880,49.116737,-98.760849,0.000000,"Init"};
+item1[] = {"wait_for_a_failu",4,218,-40.872253,-40.988251,49.127747,9.011749,0.000000,"wait for" \n "a failure"};
+item2[] = {"disable_user_inp",2,250,-168.778381,14.970673,-78.778366,64.970673,0.000000,"disable" \n "user" \n "input"};
+item3[] = {"wait_for_failure",4,218,-42.723366,87.065308,47.276642,137.065308,0.000000,"wait for" \n "failure" \n "correction"};
+item4[] = {"enable_user_inpu",2,4346,60.940399,16.642059,150.940414,66.642059,0.000000,"enable" \n "user" \n "input"};
+link0[] = {0,1};
+link1[] = {1,2};
+link2[] = {2,3};
+link3[] = {3,4};
+link4[] = {4,1};
+globals[] = {0.000000,0,0,0,0,640,480,2,32,6316128,1,-259.415283,323.629272,204.846558,-267.574493,1091,884,1};
+window[] = {2,-1,-1,-1,-1,831,104,1244,104,3,1109};
+*//*%FSM</HEAD>*/
+class FSM
+{
+        fsmName = "tfar_teamspeakRequirement.fsm";
+        class States
+        {
+                /*%FSM<STATE "Init">*/
+                class Init
+                {
+                        name = "Init";
+                        itemno = 0;
+                        init = /*%FSM<STATEINIT""">*/"/*" \n
+                         "	Licensed under CC BY-NC-SA License (https://creativecommons.org/licenses/by-nc-sa/3.0/de/deed.en)" \n
+                         "*/" \n
+                         "//set it as static local variable" \n
+                         "private _teamspeakServerName = (_this select 0);" \n
+                         "private _teamspeakChannelName = tf_radio_channel_name;"/*%FSM</STATEINIT""">*/;
+                        precondition = /*%FSM<STATEPRECONDITION""">*/""/*%FSM</STATEPRECONDITION""">*/;
+                        class Links
+                        {
+                                /*%FSM<LINK "wait_for_a_failu">*/
+                                class wait_for_a_failu
+                                {
+                                        itemno = 1;
+                                        priority = 0.000000;
+                                        to="disable_user_inp";
+                                        precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+                                        condition=/*%FSM<CONDITION""">*/"(alive player) &&" \n
+                                         "(" \n
+                                         "	(call TFAR_fnc_getTeamSpeakChannelName) != _teamspeakChannelName ||" \n
+                                         "	(call TFAR_fnc_getTeamSpeakServerName) != _teamspeakServerName ||" \n
+                                         "	!(call TFAR_fnc_isTeamSpeakPluginEnabled)" \n
+                                         ") &&" \n
+                                         "getClientState == ""BRIEFING READ""" \n
+                                         ""/*%FSM</CONDITION""">*/;
+                                        action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
+                                };
+                                /*%FSM</LINK>*/
+                        };
+                };
+                /*%FSM</STATE>*/
+                /*%FSM<STATE "disable_user_inp">*/
+                class disable_user_inp
+                {
+                        name = "disable_user_inp";
+                        itemno = 2;
+                        init = /*%FSM<STATEINIT""">*/"" \n
+                         """tfar_teamspeakRequirement"" cutText [" \n
+                         "	""Du kannst aus folgenden Gründen nicht am Spielgeschehen teilnehmen:\nDein Task-Force-Radio Plugin ist nicht aktiviert.\nDu bist auf einem anderem Teamspeak Server Tab.\nDu bist nicht im Task-Force-Radio Channel.""," \n
+                         "	""BLACK OUT""," \n
+                         "	0.01," \n
+                         "	true" \n
+                         "];" \n
+                         "" \n
+                         "disableUserInput true;" \n
+                         ""/*%FSM</STATEINIT""">*/;
+                        precondition = /*%FSM<STATEPRECONDITION""">*/""/*%FSM</STATEPRECONDITION""">*/;
+                        class Links
+                        {
+                                /*%FSM<LINK "wait_for_failure">*/
+                                class wait_for_failure
+                                {
+                                        itemno = 3;
+                                        priority = 0.000000;
+                                        to="enable_user_inpu";
+                                        precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+                                        condition=/*%FSM<CONDITION""">*/"(alive player) &&" \n
+                                         "(call TFAR_fnc_getTeamSpeakChannelName) == _teamspeakChannelName &&" \n
+                                         "(call TFAR_fnc_getTeamSpeakServerName) == _teamspeakServerName &&" \n
+                                         "(call TFAR_fnc_isTeamSpeakPluginEnabled)" \n
+                                         ""/*%FSM</CONDITION""">*/;
+                                        action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
+                                };
+                                /*%FSM</LINK>*/
+                        };
+                };
+                /*%FSM</STATE>*/
+                /*%FSM<STATE "enable_user_inpu">*/
+                class enable_user_inpu
+                {
+                        name = "enable_user_inpu";
+                        itemno = 4;
+                        init = /*%FSM<STATEINIT""">*/"" \n
+                         """tfar_teamspeakRequirement"" cutText [" \n
+                         "	""""," \n
+                         "	""BLACK IN""," \n
+                         "	1," \n
+                         "	true" \n
+                         "];" \n
+                         "" \n
+                         "disableUserInput false;" \n
+                         ""/*%FSM</STATEINIT""">*/;
+                        precondition = /*%FSM<STATEPRECONDITION""">*/""/*%FSM</STATEPRECONDITION""">*/;
+                        class Links
+                        {
+                                /*%FSM<LINK "wait_for_a_failu">*/
+                                class wait_for_a_failu
+                                {
+                                        itemno = 1;
+                                        priority = 0.000000;
+                                        to="disable_user_inp";
+                                        precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+                                        condition=/*%FSM<CONDITION""">*/"(alive player) &&" \n
+                                         "(" \n
+                                         "	(call TFAR_fnc_getTeamSpeakChannelName) != _teamspeakChannelName ||" \n
+                                         "	(call TFAR_fnc_getTeamSpeakServerName) != _teamspeakServerName ||" \n
+                                         "	!(call TFAR_fnc_isTeamSpeakPluginEnabled)" \n
+                                         ") &&" \n
+                                         "getClientState == ""BRIEFING READ""" \n
+                                         ""/*%FSM</CONDITION""">*/;
+                                        action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
+                                };
+                                /*%FSM</LINK>*/
+                        };
+                };
+                /*%FSM</STATE>*/
+        };
+        initState="Init";
+        finalStates[] =
+        {
+        };
+};
+/*%FSM</COMPILE>*/
